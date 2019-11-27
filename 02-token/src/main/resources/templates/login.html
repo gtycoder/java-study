@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="/static/jquery-3.2.1.js"></script>
+    <script>
+        /*设置token为全局变量*/
+        var token = ''
+        function fun02() {
+            var name = $("#name").val()
+            var password = $("#password").val()
+            $.ajax({
+                url: "/login",
+                type: "post",
+                data: {
+                    username: name,
+                    password: password
+                },
+                success: function (data) {
+                    token = data
+                    alert(token)
+                }
+            })
+        }
+
+        function fun01() {
+            $.ajax({
+                url: "/ajax",
+                type: "get",
+                data: {},
+                headers: {'tokenHeader': token},
+                success: function (data) {
+                    alert(data)
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<form id="login">
+    姓名:<input type="text" name="username" id="name"><br>
+    密码:<input type="password" name="password" id="password"><br>
+    <input type="button" value="登录" onclick="fun02()">
+</form>
+<br>
+<input type="button" value="ajax请求" onclick="fun01()">
+</body>
+</html>
