@@ -1,0 +1,7 @@
+简单的使用一下applicationEvent和Listener封装的监听器
+步骤:
+1.创建一个event,并继承ApplicationEvent,并重写构造方法,(其实一个事件就是一个实体类)
+2.创建一个ListenerConfig,配置当事件触发之后,怎么做,以及触发的同步异步.(可以配置多个listener)
+    由于是配置类,需要将对象给spring管理,同时在listener触发方法上使用@EventListener注解
+3.创建一个service,根据情况使用applicationContext.publishEvent(userAddEvent)
+    触发过滤器,(applicationContext可以直接注入)

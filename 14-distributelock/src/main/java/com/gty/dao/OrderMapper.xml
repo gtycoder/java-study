@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gty.dao.OrderMapper">
+<select id="findOrderCount" resultType="int">
+    select count(*) from t_order
+</select>
+    <insert id="addOrder" parameterType="com.gty.domain.Order">
+        insert into t_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId !=null">
+                orderId,
+            </if>
+            <if test="productId !=null">
+                productId,
+            </if>
+        </trim>
+        values (#{orderId},#{productId})
+    </insert>
+</mapper>

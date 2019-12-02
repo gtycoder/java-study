@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gty.dao.StoreMapper">
+    <select id="findProductNumById" resultType="com.gty.domain.Store">
+        select * from t_store
+    </select>
+
+    <update id="updateProductNumById" parameterType="com.gty.domain.Store">
+        update t_store set
+         storeNum = storeNum -1
+         where productId = #{productId}
+    </update>
+
+    <update id="updateProductNumById11111" keyProperty="com.gty.domain.Store">
+        update t_store set
+        storeNum = storeNum -1 ,
+        version=version+1
+        where productId = #{productId}
+        and version = #{version}
+    </update>
+</mapper>
