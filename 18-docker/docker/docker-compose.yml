@@ -1,0 +1,32 @@
+version: '3'  # 使用的版本,如果在idea上运行docker-compose,需要idea本机也安装docker和docker-compose
+
+services:    # 启动的服务
+  web44:     # 服务的名称
+    container_name: web44    # 启动的容器的名称
+    image: 18-docker:1.0     # 生成的镜像的名称和tag
+    build:                   # 构建dockerfile
+      context: ""             # 上下文, . 表示当前的docker-compose.yml的位置
+      dockerfile: Dockerfile # 相对于上下文的Dockerfile文件位置
+    links:                   # 连接其他服务,将其他容器的IP配置进当前容器的hosts
+      - redis44              # 例如 192.168.25.25  redis44   可以使用redis44作为连接IP
+      - mysql44              # 同上
+    ports:                   # 映射配置端口
+      - 8080:8080
+
+  redis44:
+    image: redis
+    ports:
+      - 6379:6379
+
+  mysql44:
+    image: mysql
+    ports:
+      - 3306:3306
+    volumes:                 # 配置使用的外部连接数据卷
+      - /usr/local/mysql/data:/var/lib/mysql
+      - /usr/local/mysql/conf/my.conf:/etc/mysql/my.conf
+    privileged: true         # 是否内部容器提升权限为root
+    environment:             # 相当于docker run -e MYSQL_ROOT_PASSWORD=112233
+      - MYSQL_ROOT_PASSWORD=112233
+
+
