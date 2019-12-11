@@ -1,5 +1,6 @@
 version: '3'  # 使用的版本,如果在idea上运行docker-compose,需要idea本机也安装docker和docker-compose
 
+# 这是使用的服务s.
 services:    # 启动的服务
   web44:     # 服务的名称
     container_name: web44    # 启动的容器的名称
