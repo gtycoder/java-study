@@ -11,7 +11,7 @@ public class DBUtil {
     private static String driver = "com.mysql.cj.jdbc.Driver";
     private static String ip = "localhost";
     private static String port = "3306";
-    private static String db = "dev";
+    private static String db = "src/main/dev";
     private static String name = "root";
     private static String password = "112233";
     public static String tableName = "t_user";

@@ -1,6 +1,7 @@
 package com.gty.controller;
 
 import com.gty.dao.TestMapping;
+import com.gty.domain.DockerProp;
 import com.gty.domain.Person;
 import com.gty.util.RedisConn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.List;
 public class TestController {
     @Autowired
     private TestMapping testMapping;
+    @Autowired
+    private DockerProp dockerProp;
 
     //只发布一个docker
     @RequestMapping("/one")
@@ -62,6 +65,11 @@ public class TestController {
     public List<Person> getPerson() {
         List<Person> personList = testMapping.getAllPerson();
         return personList;
+    }
+
+    @RequestMapping("/getProp")
+    public String getProp() {
+        return dockerProp.getContent();
     }
 
 }

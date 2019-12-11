@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!--配置profile的位置后边可以通过${profile.dir}取值使用-->
+        <profile.dir>src/main/profile</profile.dir>
     </properties>
 
     <dependencies>
@@ -50,8 +52,11 @@
         </dependency>
     </dependencies>
 
+
     <build>
         <plugins>
+
+            <!--springboot的插件-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
