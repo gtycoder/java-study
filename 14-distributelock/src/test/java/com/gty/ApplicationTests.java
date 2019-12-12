@@ -153,6 +153,7 @@ class ApplicationTests {
     @Test
     void test09() {
         ZkClient client = new ZkClient("192.168.25.25:2181", 10000);
+        // true代表递归创建
         //client.createPersistent("/11/22/33",true);
         //client.createEphemeral("/aa/bb/cc");
 

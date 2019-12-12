@@ -20,7 +20,7 @@ public class ZkClientLock {
         this.zkNode = "/" + zkNode + "_";
     }
 
-    public void init() {
+    private void init() {
         zkClient = new ZkClient("192.168.25.25:2181", 80000);
         //根节点是否存在
         boolean exists = zkClient.exists(rootNode);
