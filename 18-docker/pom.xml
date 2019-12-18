@@ -73,7 +73,7 @@
                         <id>build-image</id>
                         <!--将插件绑定在package这个phase上。也就是说，用户只需执行mvn package ，就会自动执行mvn docker:build-->
                         <!--这里我测试docker-compose的时候注释掉了.需要使用的时候记得打开-->
-                        <phase>package</phase>
+                        <!--<phase>package</phase>-->
                         <goals>
                             <goal>build</goal>
                         </goals>
