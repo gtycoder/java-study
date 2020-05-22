@@ -1,0 +1,6 @@
+server:
+  port: 8080
+
+gtyfreemarker:
+  templatePath: classpath:/freemarker/templates/
+
