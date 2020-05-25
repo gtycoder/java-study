@@ -55,12 +55,11 @@ public class FreeMarkerUtils {
         compressInfo01.put(infoMap01.get("className") + ".java", bytes01);
         compressInfoList.add(compressInfo01);
 
+        //可以使用一个流完成,只需要清空即可
         arrayOutputStream.reset();
         writer.flush();
 
         //组建第二个流信息
-        //ByteArrayOutputStream arrayOutputStream02 = new ByteArrayOutputStream();
-        //OutputStreamWriter writer02 = new OutputStreamWriter(arrayOutputStream02);
         temp.process(infoMap02, writer);
         byte[] bytes02 = arrayOutputStream.toByteArray();
         Map<String, byte[]> compressInfo02 = new HashMap<>();
@@ -72,8 +71,6 @@ public class FreeMarkerUtils {
         writer.flush();
 
         //组建第三个流信息
-        //ByteArrayOutputStream arrayOutputStream03 = new ByteArrayOutputStream();
-        //OutputStreamWriter writer03 = new OutputStreamWriter(arrayOutputStream03);
         temp.process(infoMap03, writer);
         byte[] bytes03 = arrayOutputStream.toByteArray();
         Map<String, byte[]> compressInfo03 = new HashMap<>();
@@ -98,7 +95,9 @@ public class FreeMarkerUtils {
         Configuration configuration = buildFreemarkerTemplate();
         Template temp = configuration.getTemplate("Model.ftl");
 
+        //构造k-v型数据
         Map<String, Object> infoMap = generateData("test001");
+
         //使用文件输出流输出成一个文件,    文件路径和文件名,    文件名同类名
         File fileDir = new File("D://test/" + generateFilePath());
         if (!fileDir.exists()) {

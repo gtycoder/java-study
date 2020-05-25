@@ -134,8 +134,20 @@ socket是一个网络编程的模型,是最基础的java网络.
 
 对应netty文章:https://blog.csdn.net/sqlgao22/article/details/103146599
 
+## 18-docker
+使用docker发布容器,已经使用docker-compose进行容器的编排部署
+
+对应文章:https://blog.csdn.net/sqlgao22/article/details/103487790
 
 
+## freemarker
+使用freemarker生成代码.
+生成代码 -> 代码文件
+生成代码 -> 字节流压缩直接传送给客户端
+压缩 -> 压缩文件
+压缩 -> 使用byte[]直接传流给客户端
+
+对应文章:https://blog.csdn.net/sqlgao22/article/details/106298887
 
 
 
