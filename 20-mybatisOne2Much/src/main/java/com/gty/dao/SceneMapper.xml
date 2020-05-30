@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gty.dao.SceneMapper">
+
+    <resultMap id="sceneMap" type="com.gty.domain.Scene">
+        <id column="id" property="id"/>
+        <result column="scene_code" property="sceneCode"/>
+        <result column="scene_name" property="sceneName"/>
+    </resultMap>
+
+    <resultMap id="dataMap" type="com.gty.domain.Data">
+        <id column="id" property="id"/>
+        <result column="data_code" property="dataCode"/>
+        <result column="data_name" property="dataName"/>
+    </resultMap>
+
+    <resultMap id="sceneDataMapperMap" type="com.gty.domain.SceneDataMapper">
+        <id column="id" property="id"/>
+        <result column="scene_code" property="sceneCode"/>
+        <collection property="dataList" ofType="com.gty.domain.Data"
+                    select="selectDataList" column="{sceneCode=scene_code}" />
+    </resultMap>
+
+    <select id="selectDataList" resultMap="dataMap" parameterType="hashmap">
+        select td.* from t_data td left JOIN t_scene_data_mapper sdm on td.data_code = sdm.data_code
+        where scene_code =  #{sceneCode}
+    </select>
+
+    <select id="sceneDataMapperCount" resultType="int">
+        select count(1) from (select count(*)
+        from t_scene ts right JOIN t_scene_data_mapper sdm on ts.scene_code = sdm.scene_code left join t_data td on td.data_code = sdm.data_code
+        where ts.scene_code like concat('%','scene00','%')
+        group by ts.scene_code) t
+    </select>
+
+    <select id="sceneDataMapperList" resultMap="sceneDataMapperMap">
+        select * from t_scene ts right JOIN t_scene_data_mapper sdm on ts.scene_code = sdm.scene_code left join t_data td on td.data_code = sdm.data_code
+        where ts.scene_code like concat('%','scene00','%')
+        and td.data_name like concat('%','3','%')
+        group by ts.scene_code
+
+    </select>
+
+</mapper>
