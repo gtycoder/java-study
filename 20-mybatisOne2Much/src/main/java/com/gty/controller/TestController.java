@@ -26,7 +26,6 @@ public class TestController {
 
     @RequestMapping("/page22")
     public String page22() {
-
         List<SceneDataMapper> sceneList =  sceneMapper.sceneDataMapperList();
         for (SceneDataMapper scene : sceneList) {
             System.out.println(scene);
