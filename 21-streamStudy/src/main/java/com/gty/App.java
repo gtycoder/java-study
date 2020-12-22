@@ -1,10 +1,11 @@
 package com.gty;
 
+import cn.hutool.core.collection.CollUtil;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class App {
@@ -90,7 +91,7 @@ public class App {
         // 同理(a, b) -> a  就是不进行替换;;; [其实这是实现了一个比较接口,和上边的排序一样]a
         // 若是没有这一项有重复的key时会抛出异常
         Map<String, StreamTestStudent> toStudentMap = studentList.stream().collect(Collectors.toMap(StreamTestStudent::getName, temp -> temp, (a, b) -> a));
-        toStudentMap.entrySet().forEach(e -> System.out.println(e.getKey() + "==" + e.getValue()));
+        toStudentMap.forEach((key, value) -> System.out.println(key + "==" + value));
     }
 
     /**
@@ -117,9 +118,7 @@ public class App {
     @Test
     public void test08() {
         Map<String, List<StreamTestStudent>> gradeNameGroup = studentList.stream().collect(Collectors.groupingBy(temp -> temp.getGradeName()));
-        gradeNameGroup.entrySet().forEach(e -> {
-            e.getValue().forEach(t -> System.out.println(e.getKey() + "==" + t.toString()));
-        });
+        gradeNameGroup.forEach((key, value) -> value.forEach(t -> System.out.println(key + "==" + t.toString())));
     }
 
     /**
@@ -129,12 +128,7 @@ public class App {
     @Test
     public void test09() {
         Map<String, Map<String, List<StreamTestStudent>>> groupByGradeNextClass = studentList.stream().collect(Collectors.groupingBy(temp -> temp.getGradeName(), Collectors.groupingBy(temp -> temp.getClassName())));
-        groupByGradeNextClass.entrySet().forEach(e -> {
-            Map<String, List<StreamTestStudent>> value = e.getValue();
-            value.entrySet().forEach(m -> {
-                m.getValue().forEach(t -> System.out.println(e.getKey() + "==" + m.getKey() + "==" + t.toString()));
-            });
-        });
+        groupByGradeNextClass.forEach((key1, value) -> value.forEach((key, value1) -> value1.forEach(t -> System.out.println(key1 + "==" + key + "==" + t.toString()))));
     }
 
     /**
@@ -144,11 +138,7 @@ public class App {
     @Test
     public void test10() {
         Map<String, Map<String, Double>> groupAndSum = studentList.stream().collect(Collectors.groupingBy(temp -> temp.getGradeName(), Collectors.groupingBy(temp -> temp.getClassName(), Collectors.summingDouble(temp -> temp.getScore()))));
-        groupAndSum.entrySet().forEach(e -> {
-            e.getValue().entrySet().forEach(t -> {
-                System.out.println(e.getKey() + "==" + t.getKey() + "==" + t.getValue());
-            });
-        });
+        groupAndSum.forEach((key, value) -> value.forEach((key1, value1) -> System.out.println(key + "==" + key1 + "==" + value1)));
 
     }
 
@@ -159,9 +149,128 @@ public class App {
     @Test
     public void test11() {
         Map<String, Map<String, Long>> groupCount = studentList.stream().filter(temp -> temp.getScore() > 60).collect(Collectors.groupingBy(StreamTestStudent::getGradeName, Collectors.groupingBy(StreamTestStudent::getClassName, Collectors.counting())));
-        groupCount.entrySet().forEach(e -> {
-            e.getValue().entrySet().forEach(t -> System.out.println(e.getKey() + "==" + t.getKey() + "==" + t.getValue()));
-        });
+        groupCount.forEach((key, value) -> value.entrySet().forEach(t -> System.out.println(key + "==" + t.getKey() + "==" + t.getValue())));
+    }
+
+    /**
+     * flatMap 方法用于映射每个元素到对应的结果，一对多。
+     * 示例:从句子中得到单词
+     */
+    @Test
+    public void test12() {
+        ArrayList<String> words = CollUtil.newArrayList("The way of the future");
+        List<String> collect = words.stream().flatMap(s -> Stream.of(s.split(" "))).filter(s -> s.length() > 2).collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
+
+    /**
+     * limit(5) 取前5条记录
+     * skip(2)  调过前两条记录
+     */
+    @Test
+    public void test13() {
+        ArrayList<String> strList = CollUtil.newArrayList("aa", "bb", "cc", "dd", "ee", "ff", "gg");
+        //   2 <= i < 5
+        List<String> collect = strList.stream().limit(5).skip(2).collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
+
+
+    /**
+     * 使用peek()保存中间操作
+     */
+    @Test
+    public void test14() {
+        ArrayList<String> strList = CollUtil.newArrayList("one", "two", "three", "four", "five");
+        ArrayList<Object> firstList = CollUtil.newArrayList();
+        List<String> collect = strList.stream().filter(s -> s.length() > 3).peek(firstList::add).map(String::toUpperCase).peek(e -> System.out.println("第二次" + e)).collect(Collectors.toList());
+        collect.forEach(System.out::println);
+        System.out.println("---------------------");
+        firstList.forEach(System.out::println);
+    }
+
+    /**
+     * Stream流的Match使用
+     * allMatch： Stream 中全部元素符合则返回 true
+     * anyMatch： Stream 中只要有一个元素符合则返回 true
+     * noneMatch： Stream 中没有一个元素符合则返回 true
+     */
+    @Test
+    public void test15() {
+        ArrayList<Integer> integers = CollUtil.newArrayList(1, 2, 3, 4, 5, 6, 7, 8);
+        boolean all = integers.stream().allMatch(i -> i > 3);
+        System.out.println("是否全部大于3的" + all);
+
+        boolean any = integers.stream().anyMatch(i -> i > 3);
+        System.out.println("是否有一个是大于3的" + any);
+
+        boolean none = integers.stream().noneMatch(i -> i > 3);
+        System.out.println("是否没有一个大于3的" + none);
+
+    }
+
+
+    @Test
+    public void test16() {
+        //-----------字符串连接------------
+//        ArrayList<String> strings = CollUtil.newArrayList("a", "b", "c", "d");
+//        String reduce = strings.stream().reduce("profix,", String::concat);
+//        System.out.println(reduce);
+
+        //-------------求和/最值------------------
+        ArrayList<Double> doubles = CollUtil.newArrayList(1.1, 2.3, 0.3, 4.34, 5.33);
+        //Double reduce1 = doubles.stream().reduce(Double.MAX_VALUE, Double::sum);
+        Optional<Double> reduce1 = doubles.stream().reduce(Double::max);
+        System.out.println(reduce1.get());
+
+
+    }
+
+    /**
+     * iterate 跟 reduce 操作很像，
+     * 接受一个种子值，和一个UnaryOperator（例如 f）。
+     * 然后种子值seed成为 Stream 的第一个元素，
+     * f(seed) 为第二个，
+     * f(f(seed)) 第三个，以此类推。
+     * 在 iterate 时候管道必须有 limit 这样的操作来限制 Stream 大小。
+     */
+    @Test
+    public void test17() {
+        //从首项2开始生成一个公差为3的等差数列
+        Stream.iterate(2,n->n+3).limit(5).forEach(System.out::println);
+    }
+
+
+    /**
+     * 通过实现Supplier类的方法可以自定义流计算规则。
+     */
+    class MySupplier implements Supplier<String>{
+        //自定义随机数
+        Random random = new Random();
+
+        @Override
+        public String get() {
+            return "随机数"+random.nextInt(1000);
+        }
+    }
+    @Test
+    public void test18() {
+        Stream.generate(new MySupplier()).limit(4).forEach(t-> System.out.println(t));
+    }
+
+
+    /**
+     * IntSummaryStatistics 用于收集统计信息(如count、min、max、sum和average)的状态对象。
+     */
+    @Test
+    public void test19() {
+        List<Integer> numbers = Arrays.asList(1, 5, 7, 3, 9);
+        IntSummaryStatistics stats = numbers.stream().mapToInt((x) -> x).summaryStatistics();
+
+        System.out.println("列表中最大的数 : " + stats.getMax());
+        System.out.println("列表中最小的数 : " + stats.getMin());
+        System.out.println("所有数之和 : " + stats.getSum());
+        System.out.println("平均数 : " + stats.getAverage());
     }
 
 }
